@@ -163,6 +163,29 @@ mod test_to_camel {
     }
 }
 
+mod test_to_lowercamel {
+    use paste::paste;
+
+    macro_rules! m {
+        ($id:ident) => {
+            paste! {
+                const DEFAULT_CAMEL: &str = stringify!([<$id:lowerCamel>]);
+                const LOWER_CAMEL: &str = stringify!([<$id:lowerCamel:lower>]);
+                const UPPER_CAMEL: &str = stringify!([<$id:lowerCamel:upper>]);
+            }
+        };
+    }
+
+    m!(this_is_but_a_test);
+
+    #[test]
+    fn test_to_camel() {
+        assert_eq!(DEFAULT_CAMEL, "thisIsButATest");
+        assert_eq!(LOWER_CAMEL, "thisisbutatest");
+        assert_eq!(UPPER_CAMEL, "THISISBUTATEST");
+    }
+}
+
 mod test_doc_expr {
     // https://github.com/dtolnay/paste/issues/29
 
