@@ -213,6 +213,35 @@ pub(crate) fn paste(segments: &[Segment]) -> Result<String> {
                         }
                         evaluated.push(acc);
                     }
+                    "lowerCamel" => {
+                        let mut acc = String::new();
+                        let mut prev = '_';
+                        let mut first = true;
+                        for ch in last.chars() {
+                            if ch != '_' {
+                                if prev == '_' {
+                                    if first {
+                                        for chu in ch.to_lowercase() {
+                                            acc.push(chu);
+                                        }
+                                    } else {
+                                        for chu in ch.to_uppercase() {
+                                            acc.push(chu);
+                                        }
+                                    }
+                                } else if prev.is_uppercase() {
+                                    for chl in ch.to_lowercase() {
+                                        acc.push(chl);
+                                    }
+                                } else {
+                                    acc.push(ch);
+                                }
+                                first = false;
+                            }
+                            prev = ch;
+                        }
+                        evaluated.push(acc);
+                    }
                     _ => {
                         return Err(Error::new2(
                             colon.span,
